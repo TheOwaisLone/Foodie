@@ -1,0 +1,40 @@
+# System / Editor configurations
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.swp
+.history/
+
+# Automation script tooling
+fix.sh
+
+# Dependencies (Universal)
+node_modules/
+
+# Local Environment Variables & Secrets
+.env
+.env.local
+backend/.env
+
+# Production Build Directories
+dist/
+build/
+out/
+
+# Backend Media Upload Caches
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Expo Mobile Ecosystem Specifics
+.expo/
+*.jks
+*.p8
+*.key
+*.apk
+*.aab
+
+# Log files
+*.log
+npm-debug.log*
