@@ -60,11 +60,9 @@ const PlaceOrder = () => {
     };
 
     try {
-      let response = await axios.post(
-        url + "/api/order/place",
-        orderData,
-        { headers: { token } }
-      );
+      let response = await axios.post(url + "/api/order/place", orderData, {
+        headers: { token },
+      });
 
       if (!response.data.success) {
         toast.error("Error placing order");
@@ -82,14 +80,19 @@ const PlaceOrder = () => {
         order_id: razorpayOrderId,
 
         handler: async function () {
-          await axios.post(
+          const verifyResponse = await axios.post(
             url + "/api/order/verify",
             { orderId },
-            { headers: { token } }
+            { headers: { token } },
           );
 
-          toast.success("Payment Successful");
-          navigate("/myorders");
+          if (verifyResponse.data.success) {
+            toast.success("Payment Successful");
+
+            window.location.href = "/myorders";
+          } else {
+            toast.error("Payment Verification Failed");
+          }
         },
 
         theme: {
@@ -99,7 +102,6 @@ const PlaceOrder = () => {
 
       const rzp = new window.Razorpay(options);
       rzp.open();
-
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
@@ -127,24 +129,87 @@ const PlaceOrder = () => {
         <p className="title">Delivery Information</p>
 
         <div className="multi-fields">
-          <input required name="firstName" value={data.firstName} onChange={onChangeHandler} type="text" placeholder="First name" />
-          <input required name="lastName" value={data.lastName} onChange={onChangeHandler} type="text" placeholder="Last name" />
+          <input
+            required
+            name="firstName"
+            value={data.firstName}
+            onChange={onChangeHandler}
+            type="text"
+            placeholder="First name"
+          />
+          <input
+            required
+            name="lastName"
+            value={data.lastName}
+            onChange={onChangeHandler}
+            type="text"
+            placeholder="Last name"
+          />
         </div>
 
-        <input required name="email" value={data.email} onChange={onChangeHandler} type="text" placeholder="Email Address" />
-        <input required name="street" value={data.street} onChange={onChangeHandler} type="text" placeholder="Street" />
+        <input
+          required
+          name="email"
+          value={data.email}
+          onChange={onChangeHandler}
+          type="text"
+          placeholder="Email Address"
+        />
+        <input
+          required
+          name="street"
+          value={data.street}
+          onChange={onChangeHandler}
+          type="text"
+          placeholder="Street"
+        />
 
         <div className="multi-fields">
-          <input required name="city" value={data.city} onChange={onChangeHandler} type="text" placeholder="City" />
-          <input required name="state" value={data.state} onChange={onChangeHandler} type="text" placeholder="State" />
+          <input
+            required
+            name="city"
+            value={data.city}
+            onChange={onChangeHandler}
+            type="text"
+            placeholder="City"
+          />
+          <input
+            required
+            name="state"
+            value={data.state}
+            onChange={onChangeHandler}
+            type="text"
+            placeholder="State"
+          />
         </div>
 
         <div className="multi-fields">
-          <input required name="zipcode" value={data.zipcode} onChange={onChangeHandler} type="text" placeholder="Zip Code" />
-          <input required name="country" value={data.country} onChange={onChangeHandler} type="text" placeholder="Country" />
+          <input
+            required
+            name="zipcode"
+            value={data.zipcode}
+            onChange={onChangeHandler}
+            type="text"
+            placeholder="Zip Code"
+          />
+          <input
+            required
+            name="country"
+            value={data.country}
+            onChange={onChangeHandler}
+            type="text"
+            placeholder="Country"
+          />
         </div>
 
-        <input required name="phone" value={data.phone} onChange={onChangeHandler} type="text" placeholder="Phone" />
+        <input
+          required
+          name="phone"
+          value={data.phone}
+          onChange={onChangeHandler}
+          type="text"
+          placeholder="Phone"
+        />
       </div>
 
       <div className="place-order-right">

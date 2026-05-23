@@ -8,9 +8,11 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// placing user order for frontend
+// place order
 const placeOrder = async (req, res) => {
+
   try {
+
     const newOrder = new orderModel({
       userId: req.body.userId,
       items: req.body.items,
@@ -19,93 +21,204 @@ const placeOrder = async (req, res) => {
     });
 
     await newOrder.save();
-    await userModel.findByIdAndUpdate(req.body.userId, { cartData: {} });
 
-    // 🔥 create Razorpay order
     const options = {
-      amount: req.body.amount * 100, // paise
+      amount: req.body.amount * 100,
       currency: "INR",
       receipt: newOrder._id.toString(),
     };
 
-    const order = await razorpay.orders.create(options);
+    const razorpayOrder = await razorpay.orders.create(options);
 
     res.json({
       success: true,
-      razorpayOrderId: order.id,
-      amount: order.amount,
+      razorpayOrderId: razorpayOrder.id,
+      amount: razorpayOrder.amount,
       key: process.env.RAZORPAY_KEY_ID,
+
+      // 🔥 IMPORTANT FIX
+      orderId: newOrder._id,
     });
+
   } catch (error) {
+
     console.log(error);
-    res.json({ success: false, message: "Error" });
+
+    res.json({
+      success: false,
+      message: "Error",
+    });
+
   }
 };
 
+// verify order
 const verifyOrder = async (req, res) => {
+
   const { orderId } = req.body;
 
   try {
-    await orderModel.findByIdAndUpdate(orderId, { payment: true });
-    res.json({ success: true, message: "Paid" });
-  } catch (error) {
-    res.json({ success: false, message: "Error" });
-  }
-};
 
-// user orders for frontend
-const userOrders = async (req, res) => {
-  try {
-    const orders = await orderModel.find({ userId: req.body.userId });
-    res.json({ success: true, data: orders });
-  } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: "Error" });
-  }
-};
+    const order = await orderModel.findById(orderId);
 
-// Listing orders for admin pannel
-const listOrders = async (req, res) => {
-  try {
-    let userData = await userModel.findById(req.body.userId);
-    if (userData && userData.role === "admin") {
-      const orders = await orderModel.find({});
-      res.json({ success: true, data: orders });
-    } else {
-      res.json({ success: false, message: "You are not admin" });
+    if (!order) {
+      return res.json({
+        success: false,
+        message: "Order not found",
+      });
     }
+
+    // payment success
+    await orderModel.findByIdAndUpdate(orderId, {
+      payment: true,
+    });
+
+    // 🔥 clear cart
+    await userModel.findByIdAndUpdate(
+      order.userId,
+      {
+        cartData: {},
+      }
+    );
+
+    res.json({
+      success: true,
+      message: "Payment Successful",
+    });
+
   } catch (error) {
+
     console.log(error);
-    res.json({ success: false, message: "Error" });
+
+    res.json({
+      success: false,
+      message: "Error",
+    });
+
   }
 };
 
-// api for updating status
-const updateStatus = async (req, res) => {
+// user orders
+const userOrders = async (req, res) => {
+
   try {
+
+    const orders = await orderModel.find({
+      userId: req.body.userId,
+    });
+
+    res.json({
+      success: true,
+      data: orders,
+    });
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.json({
+      success: false,
+      message: "Error",
+    });
+
+  }
+};
+
+// list orders
+const listOrders = async (req, res) => {
+
+  try {
+
     let userData = await userModel.findById(req.body.userId);
+
     if (userData && userData.role === "admin") {
-      const order = await orderModel.findByIdAndUpdate(
+
+      const orders = await orderModel.find({});
+
+      res.json({
+        success: true,
+        data: orders,
+      });
+
+    } else {
+
+      res.json({
+        success: false,
+        message: "You are not admin",
+      });
+
+    }
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.json({
+      success: false,
+      message: "Error",
+    });
+
+  }
+};
+
+// update order status
+const updateStatus = async (req, res) => {
+
+  try {
+
+    let userData = await userModel.findById(req.body.userId);
+
+    if (userData && userData.role === "admin") {
+
+      await orderModel.findByIdAndUpdate(
         req.body.orderId,
-        { status: req.body.status },
-        { new: true },
+        {
+          status: req.body.status,
+        },
+        { new: true }
       );
 
-      // 🔥 emit real-time update
       if (req.body.orderId) {
-        io.to(req.body.orderId.toString()).emit("orderStatusUpdated", {
-          orderId: req.body.orderId,
-          status: req.body.status,
-        });
+
+        io.to(req.body.orderId.toString()).emit(
+          "orderStatusUpdated",
+          {
+            orderId: req.body.orderId,
+            status: req.body.status,
+          }
+        );
       }
-      res.json({ success: true, message: "Status Updated Successfully" });
+
+      res.json({
+        success: true,
+        message: "Status Updated Successfully",
+      });
+
     } else {
-      res.json({ success: false, message: "You are not an admin" });
+
+      res.json({
+        success: false,
+        message: "You are not an admin",
+      });
+
     }
+
   } catch (error) {
+
     console.log(error);
-    res.json({ success: false, message: "Error" });
+
+    res.json({
+      success: false,
+      message: "Error",
+    });
+
   }
 };
 
-export { placeOrder, verifyOrder, userOrders, listOrders, updateStatus };
+export {
+  placeOrder,
+  verifyOrder,
+  userOrders,
+  listOrders,
+  updateStatus,
+};
