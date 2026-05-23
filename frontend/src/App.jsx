@@ -11,6 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Verify from "./pages/Verify/Verify";
 import MyOrders from "./pages/MyOrders/MyOrders";
 import Profile from "./pages/Profile/Profile";
+import FloatingCart from "./components/FloatingCart/FloatingCart";
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -20,6 +21,7 @@ const App = () => {
       <div className="app">
         <ToastContainer />
         <Navbar setShowLogin={setShowLogin} />
+        <FloatingCart />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
