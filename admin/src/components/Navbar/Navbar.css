@@ -1,15 +1,159 @@
-.navbar{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 4%;
+.navbar {
+  width: 100%;
+  padding: 14px 4%;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: white;
+  border-bottom: 1px solid var(--border);
+
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 }
-.navbar .logo{
-    width: max(10%,80px);
+
+/* Left */
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
-.navbar .profile{
-    width: 40px;
+
+.logo {
+  width: 140px;
+  cursor: pointer;
 }
-.login-conditon{
-    font-size: 20px;
+
+.admin-badge {
+  background: rgba(255, 99, 71, 0.12);
+  color: var(--primary);
+
+  padding: 8px 14px;
+
+  border-radius: 30px;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Right */
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* User */
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  background: #f9fafb;
+  padding: 8px 14px;
+
+  border-radius: 50px;
+
+  transition: var(--transition);
+}
+
+.navbar-user:hover {
+  background: #f3f4f6;
+}
+
+.profile {
+  width: 48px;
+  height: 48px;
+
+  border-radius: 50%;
+  object-fit: cover;
+
+  border: 2px solid var(--primary);
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-details h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.user-details p {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Buttons */
+
+.logout-btn,
+.login-btn {
+  border: none;
+  outline: none;
+
+  padding: 10px 18px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: var(--transition);
+}
+
+.logout-btn {
+  background: var(--primary);
+  color: white;
+}
+
+.logout-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.login-btn {
+  background: #111827;
+  color: white;
+}
+
+.login-btn:hover {
+  opacity: 0.9;
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 14px 20px;
+  }
+
+  .admin-badge {
+    display: none;
+  }
+
+  .user-details {
+    display: none;
+  }
+
+  .logo {
+    width: 110px;
+  }
+
+  .logout-btn,
+  .login-btn {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
 }
