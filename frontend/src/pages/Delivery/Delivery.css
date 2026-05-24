@@ -1,0 +1,62 @@
+.delivery-page {
+  padding: 60px 0 100px;
+}
+
+.delivery-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.delivery-header h1 {
+  font-size: 46px;
+  color: #0f172a;
+  margin-bottom: 14px;
+}
+
+.delivery-header p {
+  max-width: 700px;
+  margin: auto;
+
+  color: #64748b;
+
+  line-height: 1.8;
+}
+
+.delivery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+
+  gap: 28px;
+}
+
+.delivery-card {
+  background: rgba(255, 255, 255, 0.72);
+
+  backdrop-filter: blur(18px);
+
+  border-radius: 28px;
+
+  padding: 32px;
+
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  box-shadow:
+    0 10px 40px rgba(15, 23, 42, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+
+  transition: all 0.3s ease;
+}
+
+.delivery-card:hover {
+  transform: translateY(-5px);
+}
+
+.delivery-card h2 {
+  color: #0f172a;
+  margin-bottom: 16px;
+}
+
+.delivery-card p {
+  color: #64748b;
+  line-height: 1.8;
+}

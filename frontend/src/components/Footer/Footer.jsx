@@ -39,19 +39,59 @@ const Footer = () => {
 
           <ul>
             <li>
-              <Link to="/">Home</Link>
+              <Link
+                to="/"
+                onClick={() => {
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
+              >
+                Home
+              </Link>
             </li>
 
             <li>
-              <Link to="/about">About Us</Link>
+              <Link
+                to="/about"
+                onClick={() => {
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
+              >
+                About Us
+              </Link>
             </li>
 
             <li>
-              <Link to="/delivery">Delivery</Link>
+              <Link
+                to="/delivery"
+                onClick={() => {
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
+              >
+                Delivery
+              </Link>
             </li>
 
             <li>
-              <Link to="/privacy">Privacy Policy</Link>
+              <Link
+                to="/privacy"
+                onClick={() => {
+                  window.scrollTo({
+                    top: 0,
+                    behavior: "smooth",
+                  });
+                }}
+              >
+                Privacy Policy
+              </Link>
             </li>
           </ul>
         </div>

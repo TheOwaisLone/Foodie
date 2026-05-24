@@ -1,21 +1,58 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Navbar.css";
 import { assets } from "../../assets/frontend_assets/assets";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ShoppingBag, User, LogOut } from "lucide-react";
 import { StoreContext } from "../../context/StoreContext";
 import { toast } from "react-toastify";
 
 const Navbar = ({ setShowLogin }) => {
-  const [menu, setMenu] = useState("Home");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [activeSection, setActiveSection] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const dropdownRef = useRef();
+  const searchTimeoutRef = useRef(null);
 
   const { cartItems, token, setToken } = useContext(StoreContext);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
+  // active menu logic
+  const getActiveMenu = () => {
+    // homepage section priority
+    if (location.pathname === "/") {
+      if (activeSection === "Menu") {
+        return "Menu";
+      }
+
+      if (activeSection === "App") {
+        return "App";
+      }
+
+      return "Home";
+    }
+
+    switch (location.pathname) {
+      case "/about":
+        return "About";
+
+      case "/contact":
+        return "Contact";
+
+      case "/testimonials":
+        return "Testimonials";
+
+      default:
+        return "";
+    }
+  };
+
+  const menu = getActiveMenu();
+
+  // outside dropdown click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -27,28 +64,66 @@ const Navbar = ({ setShowLogin }) => {
 
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+
+      clearTimeout(searchTimeoutRef.current);
     };
   }, []);
 
+  // scroll spy for Menu/App
+  useEffect(() => {
+    const handleScroll = () => {
+      const exploreMenu = document.getElementById("explore-menu");
+      const appDownload = document.getElementById("app-download");
+
+      if (!exploreMenu || !appDownload) return;
+
+      const scrollPosition = window.scrollY + 200;
+
+      if (
+        scrollPosition >= appDownload.offsetTop &&
+        scrollPosition < appDownload.offsetTop + appDownload.offsetHeight
+      ) {
+        setActiveSection("App");
+      } else if (
+        scrollPosition >= exploreMenu.offsetTop &&
+        scrollPosition < exploreMenu.offsetTop + exploreMenu.offsetHeight
+      ) {
+        setActiveSection("Menu");
+      } else {
+        setActiveSection("");
+      }
+    };
+
+    if (location.pathname === "/") {
+      window.addEventListener("scroll", handleScroll);
+
+      handleScroll();
+    }
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [location.pathname]);
+
+  // logout
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
     setToken("");
+
     toast.success("Logged out successfully");
+
     navigate("/");
   };
 
-  // total items
-  const totalItems = Object.values(cartItems).reduce(
+  // total cart items
+  const totalItems = Object.values(cartItems || {}).reduce(
     (total, item) => total + item,
     0,
   );
 
-  // search state
-  const [showSearch, setShowSearch] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-
-  const searchTimeoutRef = useRef(null);
-
+  // search
   const handleSearch = () => {
     if (!searchTerm.trim()) {
       setShowSearch((prev) => !prev);
@@ -57,10 +132,18 @@ const Navbar = ({ setShowLogin }) => {
 
     console.log("Searching for:", searchTerm);
 
+    // future route
     // navigate(`/search?q=${searchTerm}`);
   };
 
-  const user = JSON.parse(localStorage.getItem("user")) || {};
+  // safe user parsing
+  let user = {};
+
+  try {
+    user = JSON.parse(localStorage.getItem("user")) || {};
+  } catch (error) {
+    user = {};
+  }
 
   return (
     <nav className="navbar">
@@ -72,8 +155,6 @@ const Navbar = ({ setShowLogin }) => {
         <Link
           to="/"
           onClick={() => {
-            setMenu("Home");
-
             window.scrollTo({
               top: 0,
               behavior: "smooth",
@@ -84,49 +165,61 @@ const Navbar = ({ setShowLogin }) => {
           Home
         </Link>
 
-        <a
-          href="#explore-menu"
-          onClick={() => setMenu("Menu")}
-          className={menu === "Menu" ? "active" : ""}
-        >
-          Menu
-        </a>
+        {/* Show only on homepage */}
+        {location.pathname === "/" && (
+          <>
+            <a href="#explore-menu" className={menu === "Menu" ? "active" : ""}>
+              Menu
+            </a>
 
-        <a
-          href="#app-download"
-          onClick={() => setMenu("Mobile")}
-          className={menu === "Mobile" ? "active" : ""}
-        >
-          App
-        </a>
+            <a href="#app-download" className={menu === "App" ? "active" : ""}>
+              App
+            </a>
+          </>
+        )}
 
-        <a
-          href="/"
-          onClick={() => setMenu("Testimonials")}
+        <Link
+          to="/testimonials"
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }}
           className={menu === "Testimonials" ? "active" : ""}
         >
           Testimonials
-        </a>
+        </Link>
 
-        <a
-          href="/about"
-          onClick={() => setMenu("About")}
+        <Link
+          to="/about"
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }}
           className={menu === "About" ? "active" : ""}
         >
           About Us
-        </a>
+        </Link>
 
-        <a
-          href="/contact"
-          onClick={() => setMenu("Contact")}
+        <Link
+          to="/contact"
+          onClick={() => {
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }}
           className={menu === "Contact" ? "active" : ""}
         >
           Contact Us
-        </a>
+        </Link>
       </ul>
 
       <div className="navbar-right">
-        {/* Search bar */}
+        {/* Search */}
         <div
           className={`search-container ${showSearch ? "active" : ""}`}
           onMouseEnter={() => {
@@ -175,11 +268,11 @@ const Navbar = ({ setShowLogin }) => {
           <div className="navbar-profile" ref={dropdownRef}>
             <div
               className="profile-trigger"
-              onClick={() => setShowDropdown(!showDropdown)}
+              onClick={() => setShowDropdown((prev) => !prev)}
             >
               <img
-                src={user.avatar}
-                alt={user.name}
+                src={user.avatar || assets.profile_icon}
+                alt={user.name || "User"}
                 className="navbar-avatar"
               />
             </div>
@@ -190,12 +283,15 @@ const Navbar = ({ setShowLogin }) => {
               }`}
             >
               <div className="dropdown-user-preview">
-                <img src={user.avatar} alt={user.name} />
+                <img
+                  src={user.avatar || assets.profile_icon}
+                  alt={user.name || "User"}
+                />
 
                 <div>
-                  <h4>{user.name}</h4>
+                  <h4>{user.name || "Foodie User"}</h4>
 
-                  <p>{showDropdown ? user.email : `@${user.username}`}</p>
+                  <p>{user.email || "@foodie"}</p>
                 </div>
               </div>
 
@@ -203,32 +299,34 @@ const Navbar = ({ setShowLogin }) => {
                 <>
                   <hr />
 
-                  <li
-                    onClick={() => {
-                      navigate("/profile");
-                      setShowDropdown(false);
-                    }}
-                  >
-                    <User size={18} />
-                    <span>Profile</span>
-                  </li>
+                  <ul>
+                    <li
+                      onClick={() => {
+                        navigate("/profile");
+                        setShowDropdown(false);
+                      }}
+                    >
+                      <User size={18} />
+                      <span>Profile</span>
+                    </li>
 
-                  <li
-                    onClick={() => {
-                      navigate("/myorders");
-                      setShowDropdown(false);
-                    }}
-                  >
-                    <ShoppingBag size={18} />
-                    <span>Orders</span>
-                  </li>
+                    <li
+                      onClick={() => {
+                        navigate("/myorders");
+                        setShowDropdown(false);
+                      }}
+                    >
+                      <ShoppingBag size={18} />
+                      <span>Orders</span>
+                    </li>
 
-                  <hr />
+                    <hr />
 
-                  <li onClick={logout} className="logout-item">
-                    <LogOut size={18} />
-                    <span>Logout</span>
-                  </li>
+                    <li onClick={logout} className="logout-item">
+                      <LogOut size={18} />
+                      <span>Logout</span>
+                    </li>
+                  </ul>
                 </>
               )}
             </div>

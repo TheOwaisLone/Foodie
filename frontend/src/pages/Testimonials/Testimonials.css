@@ -1,0 +1,75 @@
+.testimonials-page {
+  padding: 60px 0 100px;
+}
+
+.testimonials-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.testimonials-header h1 {
+  font-size: 42px;
+  color: #0f172a;
+  margin-bottom: 14px;
+}
+
+.testimonials-header p {
+  max-width: 650px;
+  margin: auto;
+  color: #64748b;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.testimonial-card {
+  position: relative;
+
+  background: rgba(255, 255, 255, 0.7);
+
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  backdrop-filter: blur(16px);
+
+  border-radius: 28px;
+
+  padding: 32px;
+
+  box-shadow:
+    0 10px 40px rgba(15, 23, 42, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+
+  transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-6px);
+}
+
+.quote {
+  font-size: 64px;
+  color: var(--foodie-primary);
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.review {
+  color: #334155;
+  line-height: 1.8;
+  margin-bottom: 28px;
+}
+
+.user-info h3 {
+  color: #0f172a;
+  font-size: 18px;
+}
+
+.user-info span {
+  color: #64748b;
+  font-size: 14px;
+}
