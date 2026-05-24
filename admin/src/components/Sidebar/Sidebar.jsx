@@ -1,27 +1,42 @@
-import React from 'react'
-import './Sidebar.css'
-import { assets } from '../../assets/assets'
-import { NavLink } from 'react-router-dom'
+import React from "react";
+import "./Sidebar.css";
+import { assets } from "../../assets/assets";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <div className='sidebar'>
+    <div className="sidebar">
+      <div className="sidebar-top">
+        <h2>Dashboard</h2>
+
+        <p>Manage your restaurant</p>
+      </div>
+
       <div className="sidebar-options">
-        <NavLink to='add' className="sidebar-option">
-          <img src={assets.add_icon} alt="" />
+        <NavLink to="/add" className="sidebar-option">
+          <img src={assets.add_icon} alt="add" />
+
           <p>Add Items</p>
         </NavLink>
-        <NavLink to='list' className="sidebar-option">
-          <img src={assets.order_icon} alt="" />
+
+        <NavLink to="/list" className="sidebar-option">
+          <img src={assets.order_icon} alt="list" />
+
           <p>List Items</p>
         </NavLink>
-        <NavLink to='orders' className="sidebar-option">
-          <img src={assets.order_icon} alt="" />
+
+        <NavLink to="/orders" className="sidebar-option">
+          <img src={assets.order_icon} alt="orders" />
+
           <p>Orders</p>
         </NavLink>
       </div>
-    </div>
-  )
-}
 
-export default Sidebar
+      <div className="sidebar-footer">
+        <p>Foodie Admin Panel</p>
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;
