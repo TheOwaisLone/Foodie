@@ -65,8 +65,7 @@
 }
 
 .icon-wrapper,
-.cart-container,
-.profile-wrapper {
+.cart-container {
   width: 44px;
   height: 44px;
 
@@ -84,8 +83,7 @@
 }
 
 .icon-wrapper:hover,
-.cart-container:hover,
-.profile-wrapper:hover {
+.cart-container:hover {
   transform: translateY(-2px);
   background: #eef4ff;
 }
@@ -93,12 +91,6 @@
 .icon-wrapper img,
 .cart-container img {
   width: 20px;
-}
-
-.profile-icon {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
 }
 
 .cart-container {
@@ -161,63 +153,6 @@
   position: relative;
 }
 
-.nav-profile-dropdown {
-  position: absolute;
-  top: 60px;
-  right: 0;
-
-  display: none;
-  flex-direction: column;
-
-  min-width: 180px;
-
-  padding: 12px;
-
-  border-radius: 18px;
-
-  background: white;
-
-  list-style: none;
-
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-}
-
-.nav-profile-dropdown {
-  position: absolute;
-  top: 60px;
-  right: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(10px);
-  transition: all 0.25s ease;
-}
-
-.nav-profile-dropdown.active {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.nav-profile-dropdown li:hover {
-  background: #f1f5f9;
-  color: var(--foodie-primary);
-}
-
-.nav-profile-dropdown img {
-  width: 18px;
-}
-
-.nav-profile-dropdown hr {
-  border: none;
-  height: 1px;
-  background: #e2e8f0;
-  margin: 6px 0;
-}
-
 @media (max-width: 900px) {
   .navbar {
     padding: 14px 18px;
@@ -248,8 +183,7 @@
   }
 
   .icon-wrapper,
-  .cart-container,
-  .profile-wrapper {
+  .cart-container {
     width: 40px;
     height: 40px;
   }
@@ -327,4 +261,193 @@
 .search-container .icon-wrapper:hover {
   background: rgba(59, 130, 246, 0.08);
   transform: none;
+}
+
+.profile-trigger {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+
+  border-radius: 50%;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+}
+
+.profile-trigger:hover {
+  transform: translateY(-2px);
+}
+
+.navbar-avatar {
+  width: 44px;
+  height: 44px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+
+  border: 2px solid white;
+
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+
+  transition: all 0.25s ease;
+}
+
+.navbar-avatar:hover {
+  transform: scale(1.04);
+}
+
+/* MAIN DROPDOWN */
+.nav-profile-dropdown {
+  position: absolute;
+
+  top: 62px;
+  right: 0;
+
+  width: 230px;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  backdrop-filter: blur(20px);
+
+  border-radius: 26px;
+
+  padding: 14px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  opacity: 0;
+  visibility: hidden;
+
+  transform: translateY(10px) scale(0.96);
+
+  transition: all 0.28s ease;
+
+  box-shadow:
+    0 25px 60px rgba(15, 23, 42, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+
+  border: 1px solid rgba(255, 255, 255, 0.5);
+
+  pointer-events: none;
+}
+
+/* HOVER STATE */
+.navbar-profile:hover .nav-profile-dropdown {
+  opacity: 1;
+  visibility: visible;
+
+  transform: translateY(0) scale(1);
+
+  pointer-events: auto;
+}
+
+/* CLICK EXPANDED STATE */
+.nav-profile-dropdown.expanded {
+  width: 290px;
+
+  padding: 18px;
+}
+
+/* FORCE ACTIVE */
+.nav-profile-dropdown.active {
+  opacity: 1;
+  visibility: visible;
+
+  transform: translateY(0) scale(1);
+
+  pointer-events: auto;
+}
+
+.dropdown-user-preview {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+.dropdown-user-preview img {
+  width: 52px;
+  height: 52px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
+.dropdown-user-preview h4 {
+  color: #0f172a;
+
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.dropdown-user-preview p {
+  margin-top: 4px;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+.nav-profile-dropdown li {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 14px 16px;
+
+  border-radius: 16px;
+
+  list-style: none;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+
+  color: #334155;
+
+  font-weight: 500;
+}
+
+.nav-profile-dropdown li:hover {
+  background: #f1f5f9;
+
+  color: var(--foodie-primary);
+}
+
+.logout-item:hover {
+  background: rgba(239, 68, 68, 0.08) !important;
+
+  color: #ef4444 !important;
+}
+
+.nav-profile-dropdown hr {
+  border: none;
+
+  height: 1px;
+
+  background: #e2e8f0;
+
+  margin: 6px 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Offset for sticky navbar */
+#explore-menu,
+#app-download {
+  scroll-margin-top: 120px;
 }

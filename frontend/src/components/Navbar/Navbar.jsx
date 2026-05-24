@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Navbar.css";
 import { assets } from "../../assets/frontend_assets/assets";
 import { Link, useNavigate } from "react-router-dom";
+import { ShoppingBag, User, LogOut } from "lucide-react";
 import { StoreContext } from "../../context/StoreContext";
 import { toast } from "react-toastify";
 
@@ -56,9 +57,10 @@ const Navbar = ({ setShowLogin }) => {
 
     console.log("Searching for:", searchTerm);
 
-    // Example:
     // navigate(`/search?q=${searchTerm}`);
   };
+
+  const user = JSON.parse(localStorage.getItem("user")) || {};
 
   return (
     <nav className="navbar">
@@ -69,7 +71,14 @@ const Navbar = ({ setShowLogin }) => {
       <ul className="navbar-menu">
         <Link
           to="/"
-          onClick={() => setMenu("Home")}
+          onClick={() => {
+            setMenu("Home");
+
+            window.scrollTo({
+              top: 0,
+              behavior: "smooth",
+            });
+          }}
           className={menu === "Home" ? "active" : ""}
         >
           Home
@@ -150,14 +159,14 @@ const Navbar = ({ setShowLogin }) => {
             <img src={assets.search_icon} alt="Search" />
           </div>
         </div>
-        {/* Searchbar End */}
-        {/* Cart icon with badge */}
 
+        {/* Cart */}
         <Link to="/cart" className="cart-container">
           <img src={assets.basket_icon} alt="Cart" />
 
           {totalItems > 0 && <div className="cart-badge">{totalItems}</div>}
         </Link>
+
         {!token ? (
           <button className="signin-btn" onClick={() => setShowLogin(true)}>
             Sign In
@@ -165,34 +174,64 @@ const Navbar = ({ setShowLogin }) => {
         ) : (
           <div className="navbar-profile" ref={dropdownRef}>
             <div
-              className="profile-wrapper"
+              className="profile-trigger"
               onClick={() => setShowDropdown(!showDropdown)}
             >
               <img
-                src={assets.profile_icon}
-                alt="Profile"
-                className="profile-icon"
+                src={user.avatar}
+                alt={user.name}
+                className="navbar-avatar"
               />
             </div>
 
-            <ul
-              className={`nav-profile-dropdown ${showDropdown ? "active" : ""}`}
+            <div
+              className={`nav-profile-dropdown ${
+                showDropdown ? "expanded active" : ""
+              }`}
             >
-              <li
-                onClick={() => {
-                  navigate("/myorders");
-                  setShowDropdown(false);
-                }}
-              >
-                <img src={assets.bag_icon} alt="" /> Orders
-              </li>
+              <div className="dropdown-user-preview">
+                <img src={user.avatar} alt={user.name} />
 
-              <hr />
+                <div>
+                  <h4>{user.name}</h4>
 
-              <li onClick={logout}>
-                <img src={assets.logout_icon} alt="" /> Logout
-              </li>
-            </ul>
+                  <p>{showDropdown ? user.email : `@${user.username}`}</p>
+                </div>
+              </div>
+
+              {showDropdown && (
+                <>
+                  <hr />
+
+                  <li
+                    onClick={() => {
+                      navigate("/profile");
+                      setShowDropdown(false);
+                    }}
+                  >
+                    <User size={18} />
+                    <span>Profile</span>
+                  </li>
+
+                  <li
+                    onClick={() => {
+                      navigate("/myorders");
+                      setShowDropdown(false);
+                    }}
+                  >
+                    <ShoppingBag size={18} />
+                    <span>Orders</span>
+                  </li>
+
+                  <hr />
+
+                  <li onClick={logout} className="logout-item">
+                    <LogOut size={18} />
+                    <span>Logout</span>
+                  </li>
+                </>
+              )}
+            </div>
           </div>
         )}
       </div>
