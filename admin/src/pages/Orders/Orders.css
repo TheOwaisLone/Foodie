@@ -1,42 +1,261 @@
-.order-item{
-    display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr;
-    align-items: start;
-    gap: 30px;
-    border: 1px solid tomato;
+.orders-page {
+  width: 100%;
+  padding: 40px;
+}
+
+/* Container */
+
+.orders-container {
+  width: 100%;
+}
+
+/* Header */
+
+.orders-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 30px;
+}
+
+.orders-header h1 {
+  font-size: 34px;
+  font-weight: 700;
+
+  color: var(--text);
+
+  margin-bottom: 8px;
+}
+
+.orders-header p {
+  color: var(--muted);
+}
+
+/* Count */
+
+.orders-count {
+  background: white;
+
+  padding: 12px 18px;
+
+  border-radius: 14px;
+
+  font-weight: 600;
+
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+/* Grid */
+
+.orders-grid {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+
+  gap: 24px;
+}
+
+/* Card */
+
+.order-card {
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 24px;
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+
+  transition: var(--transition);
+
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.order-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* Top */
+
+.order-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-icon {
+  width: 58px;
+  height: 58px;
+
+  background: #fff4f1;
+
+  border-radius: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-icon img {
+  width: 30px;
+}
+
+.order-id span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.order-id p {
+  font-size: 18px;
+  font-weight: 700;
+
+  color: var(--text);
+}
+
+/* Sections */
+
+.order-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.order-section h4 {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.order-foods,
+.order-address,
+.customer-phone {
+  color: #4b5563;
+
+  line-height: 1.6;
+
+  font-size: 14px;
+}
+
+.customer-name {
+  font-size: 18px;
+  font-weight: 600;
+
+  color: var(--text);
+}
+
+/* Bottom */
+
+.order-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 20px;
+}
+
+.order-price {
+  font-size: 24px;
+  font-weight: 700;
+
+  color: var(--primary);
+}
+
+/* Select */
+
+.order-bottom select {
+  border: none;
+
+  background: #fff1ef;
+
+  color: var(--primary);
+
+  padding: 12px 16px;
+
+  border-radius: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  outline: none;
+
+  transition: var(--transition);
+}
+
+.order-bottom select:hover {
+  background: #ffe5df;
+}
+
+/* Empty */
+
+.empty-orders,
+.orders-loading {
+  background: white;
+
+  border-radius: 24px;
+
+  padding: 70px 20px;
+
+  text-align: center;
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+}
+
+.empty-orders h2 {
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.empty-orders p,
+.orders-loading p {
+  color: var(--muted);
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .orders-page {
     padding: 20px;
-    margin: 30px 0px;
-    font-size: 14px;
-    color: #505050;
+  }
+
+  .orders-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .orders-header h1 {
+    font-size: 28px;
+  }
+
+  .orders-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .order-bottom {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .order-bottom select {
+    width: 100%;
+  }
 }
-.order-item-food, .order-item-name{
-    font-weight: 600;
-}
-.order-item-name{
-    margin-top: 30px;
-    margin-bottom: 5px;
-}
-.order-item-address{
-    margin-bottom: 10px;
-}
-.order-item select{
-    background-color: #ffe8e4;
-    border: 1px solid tomato;
-    width: max(11vw,120px);
-    padding: 10px;
-    outline: none;
-}
-@media (max-width:1000px) {
-    .order-item{
-        font-size: 12px;
-        grid-template-columns: 0.5fr 2fr 1fr;
-        padding: 15px 8px;
-    }
-    .order-item select{
-        padding: 5px;
-        font-size: 12px;
-    }
-    .order-item img{
-        width: 40px;
-    }
+
+@media (max-width: 500px) {
+  .order-card {
+    padding: 20px;
+  }
+
+  .customer-name {
+    font-size: 16px;
+  }
+
+  .order-price {
+    font-size: 22px;
+  }
 }
