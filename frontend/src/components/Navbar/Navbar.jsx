@@ -42,6 +42,24 @@ const Navbar = ({ setShowLogin }) => {
     0,
   );
 
+  // search state
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const searchTimeoutRef = useRef(null);
+
+  const handleSearch = () => {
+    if (!searchTerm.trim()) {
+      setShowSearch((prev) => !prev);
+      return;
+    }
+
+    console.log("Searching for:", searchTerm);
+
+    // Example:
+    // navigate(`/search?q=${searchTerm}`);
+  };
+
   return (
     <nav className="navbar">
       <Link to="/" className="navbar-logo">
@@ -74,25 +92,72 @@ const Navbar = ({ setShowLogin }) => {
         </a>
 
         <a
-          href="#footer"
+          href="/"
+          onClick={() => setMenu("Testimonials")}
+          className={menu === "Testimonials" ? "active" : ""}
+        >
+          Testimonials
+        </a>
+
+        <a
+          href="/about"
+          onClick={() => setMenu("About")}
+          className={menu === "About" ? "active" : ""}
+        >
+          About Us
+        </a>
+
+        <a
+          href="/contact"
           onClick={() => setMenu("Contact")}
           className={menu === "Contact" ? "active" : ""}
         >
-          Contact
+          Contact Us
         </a>
       </ul>
 
       <div className="navbar-right">
-        <div className="icon-wrapper">
-          <img src={assets.search_icon} alt="Search" />
+        {/* Search bar */}
+        <div
+          className={`search-container ${showSearch ? "active" : ""}`}
+          onMouseEnter={() => {
+            clearTimeout(searchTimeoutRef.current);
+          }}
+          onMouseLeave={() => {
+            if (!searchTerm.trim()) {
+              searchTimeoutRef.current = setTimeout(() => {
+                setShowSearch(false);
+              }, 500);
+            }
+          }}
+        >
+          <input
+            type="text"
+            placeholder="Search food..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            onBlur={() => {
+              if (!searchTerm.trim()) {
+                searchTimeoutRef.current = setTimeout(() => {
+                  setShowSearch(false);
+                }, 500);
+              }
+            }}
+            className="search-input"
+          />
+
+          <div className="icon-wrapper" onClick={handleSearch}>
+            <img src={assets.search_icon} alt="Search" />
+          </div>
         </div>
+        {/* Searchbar End */}
+        {/* Cart icon with badge */}
 
         <Link to="/cart" className="cart-container">
           <img src={assets.basket_icon} alt="Cart" />
 
           {totalItems > 0 && <div className="cart-badge">{totalItems}</div>}
         </Link>
-
         {!token ? (
           <button className="signin-btn" onClick={() => setShowLogin(true)}>
             Sign In
