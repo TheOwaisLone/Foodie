@@ -1,6 +1,7 @@
 import React from "react";
 import "./Footer.css";
 import { assets } from "../../assets/frontend_assets/assets";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -23,17 +24,26 @@ const Footer = () => {
         <div className="footer-content-center">
           <h2>Company</h2>
           <ul>
-            <li>Home</li>
-            <li>About us</li>
-            <li>Delivery</li>
-            <li>Privacy Policy</li>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/about">About us</Link>
+            </li>
+            <li>
+              <Link to="/delivery">Delivery</Link>
+            </li>
+            <li>
+              <Link to="/privacy">Privacy Policy</Link>
+            </li>
           </ul>
         </div>
         <div className="footer-content-right">
           <h2>Get in touch</h2>
           <ul>
-            <li>+91-912-3456789</li>
-            <li>contact@foodie.com</li>
+            <li>+91-6006597805</li>
+            <li>ovilone92@gmail.com</li>
+            <li>123 Srinagar, Jammu and Kashmir, India, 190001</li>
           </ul>
         </div>
       </div>
