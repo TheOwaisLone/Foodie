@@ -1,58 +1,91 @@
 import React from "react";
+import { MapPin, Phone, Mail } from "lucide-react";
 import "./Footer.css";
 import { assets } from "../../assets/frontend_assets/assets";
 import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <div className="footer" id="footer">
+    <footer className="footer" id="footer">
+      <div className="footer-glow"></div>
+
       <div className="footer-content">
         <div className="footer-content-left">
-          <img src={assets.logo} alt="" />
+          <img src={assets.logo} alt="Foodie Logo" className="footer-logo" />
+
           <p>
-            Order your favourite food here. Choose from a diverse menu featuring
-            a detectable array of dishes crafted with the finest ingredients and
-            culinary expertise. Our mission is to satisfy your cravings and
-            elevate your dining experience, one delicious meal at a time.
+            Foodie brings your favorite meals directly to your doorstep with
+            fast delivery, premium quality, and an effortless ordering
+            experience designed for food lovers.
           </p>
+
           <div className="footer-social-icons">
-            <img src={assets.facebook_icon} alt="" />
-            <img src={assets.twitter_icon} alt="" />
-            <img src={assets.linkedin_icon} alt="" />
+            <a href="/">
+              <img src={assets.facebook_icon} alt="Facebook" />
+            </a>
+
+            <a href="/">
+              <img src={assets.twitter_icon} alt="Twitter" />
+            </a>
+
+            <a href="/">
+              <img src={assets.linkedin_icon} alt="LinkedIn" />
+            </a>
           </div>
         </div>
+
         <div className="footer-content-center">
-          <h2>Company</h2>
+          <h2>Quick Links</h2>
+
           <ul>
             <li>
               <Link to="/">Home</Link>
             </li>
+
             <li>
-              <Link to="/about">About us</Link>
+              <Link to="/about">About Us</Link>
             </li>
+
             <li>
               <Link to="/delivery">Delivery</Link>
             </li>
+
             <li>
               <Link to="/privacy">Privacy Policy</Link>
             </li>
           </ul>
         </div>
+
         <div className="footer-content-right">
-          <h2>Get in touch</h2>
+          <h2>Contact</h2>
+
           <ul>
-            <li>+91-6006597805</li>
-            <li>ovilone92@gmail.com</li>
-            <li>123 Srinagar, Jammu and Kashmir, India, 190001</li>
+            <li>
+              <Phone size={18} />
+              <span>+91 60065 97805</span>
+            </li>
+
+            <li>
+              <Mail size={18} />
+              <span>ovilone92@gmail.com</span>
+            </li>
+
+            <li>
+              <MapPin size={18} />
+              <span>Srinagar, Jammu & Kashmir, India</span>
+            </li>
           </ul>
         </div>
       </div>
-      <hr />
-      <p className="footer-copyright">
-        Copyright 2026 Foodie- All Right Reserved.
-      </p>
-      <p className="footer-copyright">Created by Owais Lone</p>
-    </div>
+
+      <div className="footer-bottom">
+        <p>© 2026 Foodie. All rights reserved.</p>
+
+        <p>
+          Made with ❤️ by <span>Owais Lone</span>
+        </p>
+      </div>
+    </footer>
   );
 };
 
