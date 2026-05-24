@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Navbar.css";
 import { assets } from "../../assets/frontend_assets/assets";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,79 +6,132 @@ import { StoreContext } from "../../context/StoreContext";
 import { toast } from "react-toastify";
 
 const Navbar = ({ setShowLogin }) => {
-  const [menu, setMenu] = useState("home");
-  const { getTotalCartAmount, token, setToken } = useContext(StoreContext);
+  const [menu, setMenu] = useState("Home");
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const dropdownRef = useRef();
+
+  const { cartItems, token, setToken } = useContext(StoreContext);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const logout = () => {
     localStorage.removeItem("token");
     setToken("");
-    toast.success("Logout Successfully");
+    toast.success("Logged out successfully");
     navigate("/");
   };
+
+  // total items
+  const totalItems = Object.values(cartItems).reduce(
+    (total, item) => total + item,
+    0,
+  );
+
   return (
-    <div className="navbar">
-      <Link to="/">
-        <img src={assets.logo} alt="" className="logo" />
+    <nav className="navbar">
+      <Link to="/" className="navbar-logo">
+        <img src={assets.logo} alt="Foodie Logo" className="logo" />
       </Link>
+
       <ul className="navbar-menu">
         <Link
           to="/"
           onClick={() => setMenu("Home")}
           className={menu === "Home" ? "active" : ""}
         >
-          home
+          Home
         </Link>
+
         <a
           href="#explore-menu"
           onClick={() => setMenu("Menu")}
           className={menu === "Menu" ? "active" : ""}
         >
-          menu
+          Menu
         </a>
+
         <a
           href="#app-download"
-          onClick={() => setMenu("App")}
-          className={menu === "App" ? "active" : ""}
+          onClick={() => setMenu("Mobile")}
+          className={menu === "Mobile" ? "active" : ""}
         >
-          mobile-app
+          App
         </a>
+
         <a
           href="#footer"
-          onClick={() => setMenu("Contact Us")}
-          className={menu === "Contact Us" ? "active" : ""}
+          onClick={() => setMenu("Contact")}
+          className={menu === "Contact" ? "active" : ""}
         >
-          contact us
+          Contact
         </a>
       </ul>
+
       <div className="navbar-right">
-        <img src={assets.search_icon} alt="" />
-        <div className="navbar-search-icon">
-          <Link to="/cart">
-            <img src={assets.basket_icon} alt="" />
-          </Link>
-          <div className={getTotalCartAmount() === 0 ? "" : "dot"}></div>
+        <div className="icon-wrapper">
+          <img src={assets.search_icon} alt="Search" />
         </div>
+
+        <Link to="/cart" className="cart-container">
+          <img src={assets.basket_icon} alt="Cart" />
+
+          {totalItems > 0 && <div className="cart-badge">{totalItems}</div>}
+        </Link>
+
         {!token ? (
-          <button onClick={() => setShowLogin(true)}>sign in</button>
+          <button className="signin-btn" onClick={() => setShowLogin(true)}>
+            Sign In
+          </button>
         ) : (
-          <div className="navbar-profile">
-            <img src={assets.profile_icon} alt="" />
-            <ul className="nav-profile-dropdown">
-              <li onClick={() => navigate("/myorders")}>
-                <img src={assets.bag_icon} alt="" />
-                <p>Orders</p>
+          <div className="navbar-profile" ref={dropdownRef}>
+            <div
+              className="profile-wrapper"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              <img
+                src={assets.profile_icon}
+                alt="Profile"
+                className="profile-icon"
+              />
+            </div>
+
+            <ul
+              className={`nav-profile-dropdown ${showDropdown ? "active" : ""}`}
+            >
+              <li
+                onClick={() => {
+                  navigate("/myorders");
+                  setShowDropdown(false);
+                }}
+              >
+                <img src={assets.bag_icon} alt="" /> Orders
               </li>
+
               <hr />
+
               <li onClick={logout}>
-                <img src={assets.logout_icon} alt="" />
-                <p>Logout</p>
+                <img src={assets.logout_icon} alt="" /> Logout
               </li>
             </ul>
           </div>
         )}
       </div>
-    </div>
+    </nav>
   );
 };
 

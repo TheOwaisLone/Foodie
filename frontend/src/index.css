@@ -17,6 +17,7 @@
 }
 body {
   min-height: 100vh;
+  background: #f5f7fb;
 }
 a {
   text-decoration: none;
