@@ -4,7 +4,7 @@ import { assets } from "../../assets/frontend_assets/assets";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ShoppingBag, User, LogOut } from "lucide-react";
 import { StoreContext } from "../../context/StoreContext";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 const Navbar = ({ setShowLogin }) => {
   const [showDropdown, setShowDropdown] = useState(false);

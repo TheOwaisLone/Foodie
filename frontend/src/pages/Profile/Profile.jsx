@@ -10,7 +10,8 @@ import {
   Heart,
   LogOut,
 } from "lucide-react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+
 import { useNavigate } from "react-router-dom";
 
 const Profile = () => {

@@ -3,7 +3,8 @@ import "./Cart.css";
 import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
+
 import FoodItem from "../../components/FoodItem/FoodItem";
 import { assets } from "../../assets/frontend_assets/assets";
 

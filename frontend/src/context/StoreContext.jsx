@@ -1,6 +1,6 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
+import toast from "react-hot-toast";
 
 export const StoreContext = createContext(null);
 
@@ -47,9 +47,13 @@ const StoreContextProvider = (props) => {
         );
 
         if (response.data.success) {
-          toast.success("Item Added to Cart");
+          toast.success("Added to cart", {
+            id: "cart-toast",
+          });
         } else {
-          toast.error("Something went wrong");
+          toast.error("Something went wrong", {
+            id: "error-toast",
+          });
         }
       } catch (error) {
         console.log(error);
@@ -73,9 +77,13 @@ const StoreContextProvider = (props) => {
         );
 
         if (response.data.success) {
-          toast.success("Item Removed from Cart");
+          toast.success("Item Removed from Cart", {
+            id: "cart-toast",
+          });
         } else {
-          toast.error("Something went wrong");
+          toast.error("Something went wrong", {
+            id: "error-toast",
+          });
         }
       } catch (error) {
         console.log(error);
@@ -108,7 +116,9 @@ const StoreContextProvider = (props) => {
       if (response.data.success) {
         setFoodList(response.data.data);
       } else {
-        toast.error("Products not loading");
+        toast.error("Products not loading", {
+          id: "error-toast",
+        });
       }
     } catch (error) {
       console.log(error);
