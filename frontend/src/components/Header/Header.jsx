@@ -3,18 +3,31 @@ import "./Header.css";
 
 const Header = () => {
   return (
-    <div className="header">
+    <section className="header">
+      <div className="header-overlay"></div>
+
       <div className="header-contents">
-        <h2>Order your favourite food here</h2>
+        <span className="header-badge">🔥 Fast Delivery in Your City</span>
+
+        <h1>
+          Delicious Food,
+          <br />
+          Delivered Fresh.
+        </h1>
+
         <p>
-          Choose from a diverse menu featuring a detectable array of dishes
-          crafted with the finest ingredients and culinary expertise. Our
-          mission is to satisfy your cravings and elevate your dining
-          experience, one delicious meal at a time.
+          Discover premium dishes crafted by top chefs and delivered to your
+          doorstep in minutes. Fresh ingredients, rich flavors, and comfort in
+          every bite.
         </p>
-        <button>View Menu</button>
+
+        <div className="header-buttons">
+          <button className="primary-btn">Explore Menu</button>
+
+          <button className="secondary-btn">Order Now</button>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

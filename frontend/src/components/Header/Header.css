@@ -1,52 +1,190 @@
 .header {
-  height: 34vw;
-  margin: 30px auto;
-  background: url("/header_img.png") no-repeat;
-  background-size: cover;
   position: relative;
+
+  height: 85vh;
+  min-height: 620px;
+
+  margin-top: 24px;
+
+  border-radius: 36px;
+
+  overflow: hidden;
+
+  background:
+    linear-gradient(to right, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.35)),
+    url("/header_img.png");
+
+  background-size: cover;
+  background-position: center;
+
+  display: flex;
+  align-items: center;
+
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.18);
 }
-.header-contents {
+
+.header-overlay {
   position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(59, 130, 246, 0.25),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      rgba(255, 255, 255, 0.08),
+      transparent 30%
+    );
+}
+
+.header-contents {
+  position: relative;
+  z-index: 2;
+
   display: flex;
   flex-direction: column;
-  align-items: start;
-  gap: 1.5vw;
-  max-width: 50%;
-  bottom: 10%;
-  left: 6vw;
-  animation: fadeIn 3s;
+  align-items: flex-start;
+
+  gap: 24px;
+
+  width: 100%;
+  max-width: 650px;
+
+  padding-left: 6vw;
+
+  animation: fadeIn 1s ease;
 }
-.header-contents h2 {
-  font-weight: 500;
+
+.header-badge {
+  padding: 10px 18px;
+
+  border-radius: 999px;
+
+  background: rgba(255, 255, 255, 0.12);
+
+  backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+
   color: white;
-  font-size: max(4.5vw, 22px);
+
+  font-size: 14px;
+  font-weight: 500;
 }
+
+.header-contents h1 {
+  color: white;
+
+  font-size: clamp(42px, 6vw, 78px);
+  line-height: 1.05;
+
+  font-weight: 700;
+
+  letter-spacing: -2px;
+}
+
 .header-contents p {
-  color: white;
-  font-size: 1vw;
+  color: rgba(255, 255, 255, 0.82);
+
+  font-size: 17px;
+  line-height: 1.8;
+
+  max-width: 560px;
 }
-.header-contents button {
+
+.header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  margin-top: 8px;
+}
+
+.primary-btn,
+.secondary-btn {
   border: none;
-  color: #747474;
-  font-weight: 500;
-  padding: 1vw 2.3vw;
-  background-color: white;
-  font-size: max(1vw, 13px);
-  border-radius: 50px;
+  outline: none;
+
+  padding: 16px 28px;
+
+  border-radius: 999px;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
 }
-@media (max-width: 1050px) {
-  .header-contents {
-    max-width: 45%;
-  }
+
+.primary-btn {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+
+  box-shadow: 0 15px 30px rgba(37, 99, 235, 0.3);
 }
-@media (max-width: 750px) {
-  .header-contents {
-    max-width: 65%;
+
+.primary-btn:hover {
+  transform: translateY(-3px);
+}
+
+.secondary-btn {
+  background: rgba(255, 255, 255, 0.12);
+
+  color: white;
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+
+  backdrop-filter: blur(10px);
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 900px) {
+  .header {
+    height: 72vh;
+    min-height: 540px;
   }
+
+  .header-contents {
+    max-width: 90%;
+    padding: 0 24px;
+  }
+
   .header-contents p {
-    display: none;
+    font-size: 15px;
   }
-  .header-contents button {
-    padding: 2vw 4vw;
+}
+
+@media (max-width: 600px) {
+  .header {
+    height: 78vh;
+
+    border-radius: 24px;
+  }
+
+  .header-contents {
+    gap: 18px;
+  }
+
+  .header-contents p {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .header-buttons {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    width: 100%;
   }
 }
