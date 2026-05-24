@@ -4,16 +4,15 @@ import { StoreContext } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import FoodItem from "../../components/FoodItem/FoodItem";
+import { assets } from "../../assets/frontend_assets/assets";
 
 const Cart = () => {
   const {
     food_list,
     cartItems,
-    removeFromCart,
     getTotalCartAmount,
     url,
-
-    // 🔥 use global state
     discount,
     setDiscount,
     finalAmount,
@@ -34,6 +33,7 @@ const Cart = () => {
       if (response.data.success) {
         setDiscount(response.data.discount);
         setFinalAmount(response.data.finalAmount);
+
         toast.success("Promo Applied!");
       } else {
         toast.error(response.data.message);
@@ -49,101 +49,113 @@ const Cart = () => {
 
   const displayAmount = finalAmount > 0 ? finalAmount : totalAmount;
 
+  const cartProducts = food_list.filter((item) => cartItems[item._id] > 0);
+
   return (
     <div className="cart">
-      <div className="cart-items">
-        <div className="cart-items-title">
-          <p>Items</p>
-          <p>Title</p>
-          <p>Price</p>
-          <p>Quantity</p>
-          <p>Total</p>
-          <p>Remove</p>
-        </div>
-        <br />
-        <hr />
+      <div className="cart-header">
+        <div>
+          <h1>Your Cart</h1>
 
-        {food_list.map((item) => {
-          if (cartItems[item._id] > 0) {
-            return (
-              <div key={item._id}>
-                <div className="cart-items-title cart-items-item">
-                  <img src={url + "/images/" + item.image} alt="" />
-                  <p>{item.name}</p>
-                  <p>₹{item.price}</p>
-                  <p>{cartItems[item._id]}</p>
-                  <p>₹{item.price * cartItems[item._id]}</p>
-                  <p
-                    onClick={() => removeFromCart(item._id)}
-                    className="cross"
-                  >
-                    x
-                  </p>
-                </div>
-                <hr />
-              </div>
-            );
-          }
-          return null;
-        })}
+          <p>
+            {cartProducts.length} item
+            {cartProducts.length !== 1 ? "s" : ""}
+          </p>
+        </div>
+
+        <button onClick={() => navigate("/")}>Continue Shopping</button>
       </div>
 
-      <div className="cart-bottom">
-        <div className="cart-total">
-          <h2>Cart Totals</h2>
+      {cartProducts.length === 0 ? (
+        <div className="empty-cart">
+          <img src={assets.basket_icon} alt="" />
 
-          <div>
-            <div className="cart-total-details">
-              <p>Subtotal</p>
-              <p>₹{getTotalCartAmount()}</p>
+          <h2>Your cart is empty</h2>
+
+          <p>Add something delicious first.</p>
+
+          <button onClick={() => navigate("/")}>Explore Menu</button>
+        </div>
+      ) : (
+        <>
+          <div className="cart-items">
+            {cartProducts.map((item) => (
+              <div className="cart-food-item" key={item._id}>
+                <FoodItem
+                  id={item._id}
+                  name={item.name}
+                  price={
+                    item.price +
+                    "x" +
+                    cartItems[item._id] +
+                    " = ₹" +
+                    item.price * cartItems[item._id]
+                  }
+                  image={item.image}
+                />
+              </div>
+            ))}
+          </div>
+
+          <div className="cart-bottom">
+            <div className="cart-promocode">
+              <h3>Promo Code</h3>
+
+              <p>Have a promo code? Apply it here.</p>
+
+              <div className="cart-promocode-input">
+                <input
+                  type="text"
+                  placeholder="Enter promo code"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)}
+                />
+
+                <button onClick={applyPromo}>Apply</button>
+              </div>
             </div>
 
-            <hr />
+            <div className="cart-total">
+              <h2>Order Summary</h2>
 
-            <div className="cart-total-details">
-              <p>Delivery Fee</p>
-              <p>₹{getTotalCartAmount() === 0 ? 0 : 40}</p>
-            </div>
+              <div className="cart-total-details">
+                <p>Subtotal</p>
 
-            <hr />
+                <p>₹{getTotalCartAmount()}</p>
+              </div>
 
-            {discount > 0 && (
-              <>
-                <div className="cart-total-details">
+              <div className="cart-total-details">
+                <p>Delivery Fee</p>
+
+                <p>₹{getTotalCartAmount() === 0 ? 0 : 40}</p>
+              </div>
+
+              {discount > 0 && (
+                <div className="cart-total-details discount">
                   <p>Discount</p>
+
                   <p>-₹{discount}</p>
                 </div>
-                <hr />
-              </>
-            )}
+              )}
 
-            <div className="cart-total-details">
-              <b>Total</b>
-              <b>₹{displayAmount}</b>
+              <hr />
+
+              <div className="cart-total-details total">
+                <b>Total</b>
+
+                <b>₹{displayAmount}</b>
+              </div>
+
+              <button
+                className="checkout-btn"
+                onClick={() => navigate("/order")}
+              >
+                Proceed to Checkout
+              </button>
             </div>
           </div>
-
-          <button onClick={() => navigate("/order")}>
-            PROCEED TO CHECKOUT
-          </button>
-        </div>
-
-        <div className="cart-promocode">
-          <div>
-            <p>If you have a promocode, Enter it here</p>
-
-            <div className="cart-promocode-input">
-              <input
-                type="text"
-                placeholder="promo code"
-                value={promoCode}
-                onChange={(e) => setPromoCode(e.target.value)}
-              />
-              <button onClick={applyPromo}>Submit</button>
-            </div>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };
