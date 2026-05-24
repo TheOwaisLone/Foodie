@@ -70,9 +70,11 @@ const Register = ({ setShowLogin }) => {
 
         localStorage.setItem("token", response.data.token);
 
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+
         toast.success("Account created successfully");
 
-        navigate("/");
+        navigate("/profile");
       } else {
         toast.error(response.data.message);
       }

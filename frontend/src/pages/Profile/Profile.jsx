@@ -1,26 +1,113 @@
-import React from "react";
+import React, { useContext } from "react";
+import "./Profile.css";
+import { StoreContext } from "../../context/StoreContext";
+import {
+  Mail,
+  Phone,
+  User,
+  MapPin,
+  ShoppingBag,
+  Heart,
+  LogOut,
+} from "lucide-react";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
+  const { token, setToken } = useContext(StoreContext);
+
+  const navigate = useNavigate();
+
+  const user = JSON.parse(localStorage.getItem("user")) || {};
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    setToken("");
+
+    toast.success("Logged out successfully");
+
+    navigate("/");
+  };
+
   return (
-    <div className="profile-page">
-      <header className="profile-header">
-        <h1>Profile</h1>
-        <p>Manage your account details and settings.</p>
-      </header>
+    <section className="profile-page">
+      <div className="profile-container">
+        <div className="profile-top">
+          <div className="profile-avatar-section">
+            <img src={user.avatar} alt={user.name} className="profile-avatar" />
 
-      <section className="profile-card">
-        <div className="profile-info">
-          <h2>John Doe</h2>
-          <p>Email: john.doe@example.com</p>
-          <p>Member since: January 2024</p>
+            <div>
+              <h1>{user.name}</h1>
+
+              <p>@{user.username}</p>
+            </div>
+          </div>
+
+          <button className="logout-btn" onClick={logout}>
+            <LogOut size={18} />
+            Logout
+          </button>
         </div>
 
-        <div className="profile-actions">
-          <button type="button">Edit Profile</button>
-          <button type="button">Log Out</button>
+        <div className="profile-stats">
+          <div className="stat-card">
+            <ShoppingBag size={24} />
+            <h3>12</h3>
+            <p>Total Orders</p>
+          </div>
+
+          <div className="stat-card">
+            <Heart size={24} />
+            <h3>24</h3>
+            <p>Favorites</p>
+          </div>
         </div>
-      </section>
-    </div>
+
+        <div className="profile-details">
+          <h2>Account Information</h2>
+
+          <div className="profile-info-grid">
+            <div className="profile-info-card">
+              <User size={20} />
+
+              <div>
+                <span>Full Name</span>
+                <h4>{user.name}</h4>
+              </div>
+            </div>
+
+            <div className="profile-info-card">
+              <Mail size={20} />
+
+              <div>
+                <span>Email Address</span>
+                <h4>{user.email}</h4>
+              </div>
+            </div>
+
+            <div className="profile-info-card">
+              <Phone size={20} />
+
+              <div>
+                <span>Phone Number</span>
+                <h4>{user.phone}</h4>
+              </div>
+            </div>
+
+            <div className="profile-info-card">
+              <MapPin size={20} />
+
+              <div>
+                <span>Location</span>
+                <h4>India</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   );
 };
 
