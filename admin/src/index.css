@@ -1,32 +1,153 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap");
 
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: Outfit;
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+
+  --bg: #f8f9fb;
+  --card-bg: #ffffff;
+
+  --text: #262626;
+  --muted: #6b7280;
+
+  --border: #e5e7eb;
+
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  --radius: 14px;
+
+  --transition: 0.3s ease;
 }
-body{
-    min-height: 100vh;
-    background-color: #fcfcfc;
+
+/* Reset */
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Outfit", sans-serif;
 }
-a{
-    text-decoration: none;
-    color: inherit;
+
+html {
+  scroll-behavior: smooth;
 }
-hr{
-    border: none;
-    height: 1px;
-    background-color: #a9a9a9;
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
 }
-.app-content{
-    display: flex;
+
+/* Links */
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
-.flex-col{
-    display: flex;
+
+/* Horizontal Line */
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: var(--border);
+}
+
+/* Layout */
+
+.app-content {
+  display: flex;
+  width: 100%;
+}
+
+/* Reusable */
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cursor {
+  cursor: pointer;
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Buttons */
+
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.primary-btn {
+  background: var(--primary);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.primary-btn:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+/* Inputs */
+
+input,
+textarea,
+select {
+  border: 1px solid var(--border);
+  outline: none;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 15px;
+  background: white;
+  transition: var(--transition);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(255, 99, 71, 0.1);
+}
+
+/* Card */
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+/* Responsive */
+
+@media (max-width: 768px) {
+  .app-content {
     flex-direction: column;
-    gap: 10px;
-}
-.cursor{
-    cursor: pointer;
+  }
 }
