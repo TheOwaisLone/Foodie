@@ -2,14 +2,16 @@ import React, { useContext, useState } from "react";
 import "./LoginPopup.css";
 import { assets } from "../../assets/frontend_assets/assets";
 import { StoreContext } from "../../context/StoreContext";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 const LoginPopup = ({ setShowLogin }) => {
-  const {url, setToken } = useContext(StoreContext);
-  const [currentState, setCurrentState] = useState("Login");
+  const { url, setToken } = useContext(StoreContext);
+
+  const navigate = useNavigate();
+
   const [data, setData] = useState({
-    name: "",
     email: "",
     password: "",
   });
@@ -17,86 +19,91 @@ const LoginPopup = ({ setShowLogin }) => {
   const onChangeHandler = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    setData((data) => ({ ...data, [name]: value }));
+
+    setData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const onLogin = async (event) => {
     event.preventDefault();
-    let newUrl = url;
-    if (currentState === "Login") {
-      newUrl += "/api/user/login";
-    } else {
-      newUrl += "/api/user/register";
-    }
-    const response = await axios.post(newUrl, data);
-    if (response.data.success) {
-      setToken(response.data.token);
-      localStorage.setItem("token", response.data.token);
-      toast.success("Login Successfully")
-      setShowLogin(false);
-    }else{
-      toast.error(response.data.message);
+
+    try {
+      const response = await axios.post(`${url}/api/user/login`, data);
+
+      if (response.data.success) {
+        setToken(response.data.token);
+
+        localStorage.setItem("token", response.data.token);
+
+        toast.success("Login successful");
+
+        setShowLogin(false);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong");
     }
   };
+
   return (
-    <div className="login-popup">
-      <form onSubmit={onLogin} className="login-popup-container">
+    <div className="login-popup" onClick={() => setShowLogin(false)}>
+      <form
+        onSubmit={onLogin}
+        className="login-popup-container"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="login-popup-title">
-          <h2>{currentState}</h2>
+          <div>
+            <h2>Welcome Back</h2>
+
+            <p className="login-subtitle">
+              Login to continue ordering your favorite meals.
+            </p>
+          </div>
+
           <img
             onClick={() => setShowLogin(false)}
             src={assets.cross_icon}
-            alt=""
+            alt="Close"
           />
         </div>
+
         <div className="login-popup-inputs">
-          {currentState === "Login" ? (
-            <></>
-          ) : (
-            <input
-              name="name"
-              onChange={onChangeHandler}
-              value={data.name}
-              type="text"
-              placeholder="Your name"
-              required
-            />
-          )}
           <input
             name="email"
             onChange={onChangeHandler}
             value={data.email}
             type="email"
-            placeholder="Your email"
+            placeholder="Enter your email"
             required
           />
+
           <input
             name="password"
             onChange={onChangeHandler}
             value={data.password}
             type="password"
-            placeholder="Your password"
+            placeholder="Enter your password"
             required
           />
         </div>
-        <button type="submit">
-          {currentState === "Sign Up" ? "Create Account" : "Login"}
-        </button>
-        <div className="login-popup-condition">
-          <input type="checkbox" required />
-          <p>By continuing, i agree to the terms of use & privacy policy.</p>
-        </div>
-        {currentState === "Login" ? (
-          <p>
-            Create a new account?{" "}
-            <span onClick={() => setCurrentState("Sign Up")}>Click here</span>
-          </p>
-        ) : (
-          <p>
-            Already have an account?{" "}
-            <span onClick={() => setCurrentState("Login")}>Login here</span>
-          </p>
-        )}
+
+        <button type="submit">Login</button>
+
+        <p className="register-redirect">
+          Don’t have an account?
+          <span
+            onClick={() => {
+              setShowLogin(false);
+              navigate("/register");
+            }}
+          >
+            Create one
+          </span>
+        </p>
       </form>
     </div>
   );
