@@ -7,45 +7,45 @@ import { io } from "socket.io-client";
 
 const MyOrders = () => {
   const { url, token } = useContext(StoreContext);
+
   const [data, setData] = useState([]);
 
   const fetchOrders = async () => {
     const response = await axios.post(
       url + "/api/order/userorders",
       {},
-      { headers: { token } }
+      {
+        headers: { token },
+      },
     );
+
     if (response.data.success) {
       setData(response.data.data);
     }
   };
 
-  // fetch orders
+  // FETCH ORDERS
   useEffect(() => {
     if (token) {
       fetchOrders();
     }
   }, [token]);
 
-  // socket logic
+  // SOCKET LOGIC
   useEffect(() => {
     if (!data.length) return;
 
     const socket = io("http://localhost:4000");
 
-    // join all order rooms
     data.forEach((order) => {
       socket.emit("joinOrderRoom", order._id);
     });
 
-    // listen for updates
     socket.on("orderStatusUpdated", ({ orderId, status }) => {
-      console.log("LIVE:", orderId, status);
-
       setData((prev) =>
         prev.map((order) =>
-          order._id === orderId ? { ...order, status } : order
-        )
+          order._id === orderId ? { ...order, status } : order,
+        ),
       );
     });
 
@@ -56,27 +56,56 @@ const MyOrders = () => {
 
   return (
     <div className="my-orders">
-      <h2>Orders</h2>
-      <div className="container">
+      <div className="my-orders-header">
+        <h1>My Orders</h1>
+
+        <p>Track your live order status in real-time</p>
+      </div>
+
+      <div className="orders-grid">
         {data.map((order, index) => {
           return (
             <div key={index} className="my-orders-order">
-              <img src={assets.parcel_icon} alt="" />
-              <p>
-                {order.items.map((item, index) => {
-                  if (index === order.items.length - 1) {
-                    return item.name + " X " + item.quantity;
-                  } else {
-                    return item.name + " X " + item.quantity + ",";
-                  }
-                })}
-              </p>
-              <p>₹{order.amount}.00</p>
-              <p>items: {order.items.length}</p>
-              <p>
-                <span>&#x25cf;</span>
-                <b> {order.status}</b>
-              </p>
+              <div className="order-top">
+                <img src={assets.parcel_icon} alt="" />
+
+                <div>
+                  <h3>Order #{order._id.slice(-6)}</h3>
+
+                  <p>
+                    {order.items.length} item
+                    {order.items.length > 1 ? "s" : ""}
+                  </p>
+                </div>
+              </div>
+
+              <div className="order-items">
+                {order.items.map((item, index) => (
+                  <span key={index}>
+                    {item.name} × {item.quantity}
+                  </span>
+                ))}
+              </div>
+
+              <div className="order-bottom">
+                <div>
+                  <p>Total</p>
+
+                  <h2>₹{order.amount}</h2>
+                </div>
+
+                <div
+                  className={`order-status ${order.status
+                    .toLowerCase()
+                    .replace(/\s+/g, "-")}`}
+                >
+                  <span></span>
+
+                  <b>{order.status}</b>
+                </div>
+              </div>
+
+              <button onClick={fetchOrders}>Refresh Status</button>
             </div>
           );
         })}
