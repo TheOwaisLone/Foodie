@@ -1,5 +1,6 @@
 import React from "react";
 import "./Header.css";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -22,9 +23,13 @@ const Header = () => {
         </p>
 
         <div className="header-buttons">
-          <button className="primary-btn">Explore Menu</button>
+          <a href="#explore-menu" className="primary-btn">
+            Explore Menu
+          </a>
 
-          <button className="secondary-btn">Order Now</button>
+          <Link to="/cart" className="secondary-btn">
+            Order Now
+          </Link>
         </div>
       </div>
     </section>
